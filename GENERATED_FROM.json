@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-11-16T19:37:08.529785+00:00",
+  "datasets": {
+    "hf-harishnair04-mtsamples": "8d8fc4e23b468891453041c5def54b6f8c5f7810e07da859deb64863e28c1e98"
+  },
+  "datasets_note": "SHA-256 of the preview sample inspected before the build, not of the full download.",
+  "customised_after_generation": [
+    "app_config.json: tagline, show_developer_tabs false, about_file, one limitation reworded",
+    "docs/about.md added",
+    "docs/data_sources.md: wording of two lines",
+    "README.md: client view and deployment sections",
+    "GENERATED_FROM.json: reduced to generation time and dataset hashes"
+  ]
+}

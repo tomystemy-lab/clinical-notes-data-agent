@@ -1,0 +1,125 @@
+{
+  "title": "Specialty Notes Scout",
+  "tagline": "Ask in plain English about 4,999 public sample medical reports across 40 specialties: find notes on a topic, open one, or see which specialties have few examples. Every count and search result is computed by tools on the data, not guessed by the model.",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "max_turns": 6,
+  "max_tool_calls": 8,
+  "use_refusal_fallback": true,
+  "is_test_fixture": false,
+  "datasets": [
+    {
+      "id": "hf-harishnair04-mtsamples",
+      "name": "harishnair04/mtsamples",
+      "landing_page": "https://huggingface.co/datasets/harishnair04/mtsamples",
+      "license": "apache-2.0",
+      "attribution": "harishnair04/mtsamples, https://huggingface.co/datasets/harishnair04/mtsamples (licence: apache-2.0)",
+      "source": {
+        "kind": "huggingface_parquet",
+        "dataset": "harishnair04/mtsamples",
+        "config": "default",
+        "split": "train"
+      },
+      "expected_schema": {
+        "Unnamed: 0": "integer",
+        "description": "string",
+        "medical_specialty": "string",
+        "sample_name": "string",
+        "transcription": "string",
+        "keywords": "string"
+      },
+      "expected_min_rows": 4500,
+      "limitations": [
+        "Automated inspection: Snapshot inspected 2026-11-16; the source may change after this date.",
+        "Automated inspection: Profiled the first 64 rows of config 'default', split 'train' served by the Hugging Face datasets-server, not the full dataset.",
+        "Transcription samples from the MTSamples collection as redistributed by a Hugging Face user; the uploader's card states apache-2.0, the original collection's terms were not fetched (unverified).",
+        "English-language, US-style dictated reports; not European clinical text."
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "search_notes",
+      "description": "Keyword search (TF-IDF) over note titles, descriptions, transcriptions and keywords, optionally within one medical specialty. Returns note ids, titles, specialties and descriptions, not the full text.",
+      "operation": "retrieve",
+      "dataset_id": "hf-harishnair04-mtsamples",
+      "params": {
+        "text_columns": [
+          "sample_name",
+          "description",
+          "transcription",
+          "keywords"
+        ],
+        "columns": [
+          "Unnamed: 0",
+          "sample_name",
+          "medical_specialty",
+          "description"
+        ],
+        "filterable": [
+          "medical_specialty"
+        ],
+        "eval_query": "asthma"
+      }
+    },
+    {
+      "name": "read_note",
+      "description": "Return the full transcription of one note, selected by its id (the 'Unnamed: 0' value returned by search_notes).",
+      "operation": "filter_rows",
+      "dataset_id": "hf-harishnair04-mtsamples",
+      "params": {
+        "columns": [
+          "Unnamed: 0",
+          "sample_name",
+          "medical_specialty",
+          "description",
+          "transcription"
+        ],
+        "filterable": [
+          "Unnamed: 0"
+        ]
+      }
+    },
+    {
+      "name": "specialty_coverage",
+      "description": "Count notes per medical specialty, to show which specialties are well covered and which have few examples.",
+      "operation": "aggregate",
+      "dataset_id": "hf-harishnair04-mtsamples",
+      "params": {
+        "group": "medical_specialty",
+        "groups": [
+          "medical_specialty"
+        ],
+        "count_only": true,
+        "filterable": [
+          "medical_specialty"
+        ]
+      }
+    },
+    {
+      "name": "list_notes",
+      "description": "List note ids, titles and descriptions for one medical specialty.",
+      "operation": "filter_rows",
+      "dataset_id": "hf-harishnair04-mtsamples",
+      "params": {
+        "columns": [
+          "Unnamed: 0",
+          "sample_name",
+          "medical_specialty",
+          "description"
+        ],
+        "filterable": [
+          "medical_specialty"
+        ]
+      }
+    }
+  ],
+  "example_questions": [
+    "Which specialties have the most notes, and which have fewer than 10?",
+    "Find notes that mention metformin. Which specialties do they come from?",
+    "Find a Neurology note about migraine, open it and summarise how it is structured.",
+    "Show me Orthopedic notes about knee pain and open the best match."
+  ],
+  "show_developer_tabs": false,
+  "about_file": "docs/about.md"
+}

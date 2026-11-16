@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "id": "search_notes-finds-term",
+      "question": "Find records that mention asthma.",
+      "tool": "search_notes",
+      "args": {
+        "query": "asthma",
+        "limit": 5
+      },
+      "expect": {
+        "kind": "top_hit_contains",
+        "value": "asthma"
+      }
+    },
+    {
+      "id": "read_note-count",
+      "question": "How many records are there?",
+      "tool": "read_note",
+      "args": {},
+      "expect": {
+        "kind": "matched_count",
+        "value": 4999
+      }
+    },
+    {
+      "id": "specialty_coverage-top",
+      "question": "Which medical specialty has the most records?",
+      "tool": "specialty_coverage",
+      "args": {
+        "group": "medical_specialty"
+      },
+      "expect": {
+        "kind": "top_group",
+        "value": " Surgery"
+      }
+    },
+    {
+      "id": "list_notes-count",
+      "question": "How many records are there?",
+      "tool": "list_notes",
+      "args": {},
+      "expect": {
+        "kind": "matched_count",
+        "value": 4999
+      }
+    }
+  ],
+  "pinned": {
+    "at": "2026-11-16T19:37:20.006455+00:00",
+    "by": "scripts/pin_expectations.py (pyarrow + plain Python, independent of the tools)",
+    "source_sha256": {
+      "hf-harishnair04-mtsamples": [
+        "89d8e5eabe6769ea530b0c07da50f27c7a1605b836570e878cef5b956ca9ed80"
+      ]
+    }
+  }
+}
